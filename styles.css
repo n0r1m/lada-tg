@@ -4,72 +4,94 @@
     --blue: #1E90FF;
     --background: #f0f0f0;
     --text: #333;
+    --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background-color: var(--background);
     color: var(--text);
     line-height: 1.6;
+    padding-bottom: var(--safe-area-inset-bottom);
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 20px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 /* Navigation Bar */
 .nav-bar {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 20px;
+    gap: 8px;
+    margin-bottom: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--background);
+    padding: 8px 0;
 }
 
 .nav-btn {
     flex: 1;
-    padding: 10px;
+    padding: 12px 8px;
     background-color: var(--blue);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
     transition: transform 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.nav-btn:hover {
-    transform: scale(1.05);
+.nav-btn:active {
+    transform: scale(0.98);
 }
 
 /* Referral Section */
 .referral-section {
     background: white;
-    padding: 20px;
-    border-radius: 12px;
+    padding: 16px;
+    border-radius: 16px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
+    margin-bottom: 8px;
 }
 
 .referral-counter {
     text-align: center;
-    font-size: 1.2em;
-    margin: 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 12px 0;
+    color: var(--primary-green);
 }
 
 .progress-bar {
     width: 100%;
-    height: 20px;
-    background: #ddd;
-    border-radius: 10px;
+    height: 24px;
+    background: #eee;
+    border-radius: 12px;
     overflow: hidden;
-    margin: 10px 0;
+    margin: 12px 0;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .progress-fill {
@@ -82,61 +104,77 @@ body {
 /* Car Section */
 .car-section {
     text-align: center;
-    margin: 20px 0;
+    margin: 16px 0;
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .balance {
-    font-size: 1.2em;
-    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
     color: var(--gold);
 }
 
 .car-model {
-    font-size: 4em;
+    font-size: 64px;
     cursor: pointer;
     transition: transform 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
-.car-model:hover {
-    transform: scale(1.1);
+.car-model:active {
+    transform: scale(0.95);
 }
 
 /* Game Section */
 .game-section {
     background: white;
-    padding: 20px;
-    border-radius: 12px;
+    padding: 16px;
+    border-radius: 16px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
 .game-stats {
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 #gameCanvas {
     width: 100%;
     height: 200px;
     background: #f8f8f8;
-    border-radius: 8px;
-    margin-top: 10px;
+    border-radius: 12px;
+    margin-top: 12px;
+    touch-action: none;
 }
 
 /* Action Buttons */
 .action-btn {
     width: 100%;
-    padding: 12px;
+    padding: 16px;
     background-color: var(--blue);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    margin: 10px 0;
+    margin: 8px 0;
     transition: transform 0.2s;
+    font-size: 16px;
+    font-weight: 500;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.action-btn:hover {
-    transform: scale(1.02);
+.action-btn:active {
+    transform: scale(0.98);
 }
 
 /* Modal */
@@ -149,30 +187,63 @@ body {
     height: 100%;
     background: rgba(0,0,0,0.5);
     z-index: 1000;
+    backdrop-filter: blur(4px);
 }
 
 .modal-content {
     background: white;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 12px;
-    width: 80%;
-    max-width: 500px;
+    margin: 20% auto;
+    padding: 24px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
     position: relative;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
 .close {
     position: absolute;
-    right: 20px;
-    top: 10px;
-    font-size: 28px;
+    right: 16px;
+    top: 16px;
+    font-size: 24px;
     cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f0f0f0;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: calc(20px + var(--safe-area-inset-bottom));
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 24px;
+    z-index: 1000;
+    animation: fadeInOut 3s ease;
+    font-size: 14px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translate(-50%, 20px); }
+    15% { opacity: 1; transform: translate(-50%, 0); }
+    85% { opacity: 1; transform: translate(-50%, 0); }
+    100% { opacity: 0; transform: translate(-50%, -20px); }
 }
 
 /* Responsive Design */
 @media (max-width: 480px) {
     .container {
-        padding: 10px;
+        padding: 12px;
     }
     
     .nav-bar {
@@ -180,6 +251,51 @@ body {
     }
     
     .car-model {
-        font-size: 3em;
+        font-size: 48px;
+    }
+    
+    .modal-content {
+        margin: 30% auto;
+        padding: 20px;
+    }
+    
+    .action-btn {
+        padding: 14px;
+        font-size: 15px;
+    }
+    
+    .referral-counter {
+        font-size: 16px;
+    }
+    
+    .balance {
+        font-size: 18px;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #1a1a1a;
+        --text: #ffffff;
+    }
+    
+    .referral-section,
+    .car-section,
+    .game-section,
+    .modal-content {
+        background: #2d2d2d;
+    }
+    
+    .progress-bar {
+        background: #3d3d3d;
+    }
+    
+    #gameCanvas {
+        background: #2d2d2d;
+    }
+    
+    .close {
+        background: #3d3d3d;
     }
 } 
