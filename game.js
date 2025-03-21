@@ -9,8 +9,7 @@ class DinoGame {
         // Game state
         this.isPlaying = false;
         this.score = 0;
-        this.gameSpeed = 3;
-        this.maxSpeed = 8;
+        this.gameSpeed = 2;
         
         // Player
         this.player = {
@@ -20,8 +19,7 @@ class DinoGame {
             height: 40,
             jumping: false,
             jumpForce: 0,
-            gravity: 0.5,
-            groundY: 0
+            gravity: 0.4
         };
         
         // Obstacles
@@ -29,49 +27,29 @@ class DinoGame {
         this.obstacleWidth = 20;
         this.obstacleHeight = 40;
         
-        // Car sprite
-        this.carSprite = new Image();
-        this.carSprite.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9IiMxRTkwRkYiLz48cGF0aCBkPSJNMTAgMTVIMzBWMjVIMTBWMjVaIiBmaWxsPSIjRkZGRkZGIi8+PHBhdGggZD0iTTUgMTVIMzVWMjBIMzVWMjVIMzBWMzBIMTBWMjVIMVYyMFYxNVoiIGZpbGw9IiNGRkZGRkYiLz48L3N2Zz4=';
-        
         // Event listeners
         this.startBtn.addEventListener('click', () => this.startGame());
         
         // Touch controls
-        this.setupTouchControls();
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!this.isPlaying) {
+                this.startGame();
+            } else if (!this.player.jumping) {
+                this.player.jumping = true;
+                this.player.jumpForce = -10;
+            }
+        }, { passive: false });
         
         // Set canvas size
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
     }
     
-    setupTouchControls() {
-        // Prevent default touch behavior
-        this.canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            if (!this.isPlaying) {
-                this.startGame();
-            } else if (!this.player.jumping) {
-                this.jump();
-            }
-        }, { passive: false });
-        
-        this.canvas.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        }, { passive: false });
-    }
-    
     resizeCanvas() {
         this.canvas.width = this.canvas.offsetWidth;
         this.canvas.height = 200;
-        this.player.groundY = this.canvas.height - 60;
-        this.player.y = this.player.groundY;
-    }
-    
-    jump() {
-        if (!this.player.jumping) {
-            this.player.jumping = true;
-            this.player.jumpForce = -12;
-        }
+        this.player.y = this.canvas.height - 60;
     }
     
     startGame() {
@@ -79,11 +57,11 @@ class DinoGame {
         
         this.isPlaying = true;
         this.score = 0;
-        this.gameSpeed = 3;
+        this.gameSpeed = 2;
         this.obstacles = [];
         this.player.jumping = false;
         this.player.jumpForce = 0;
-        this.player.y = this.player.groundY;
+        this.player.y = this.canvas.height - 60;
         
         this.startBtn.textContent = 'Игра идет...';
         this.gameLoop();
@@ -105,8 +83,8 @@ class DinoGame {
             this.player.y += this.player.jumpForce;
             this.player.jumpForce += this.player.gravity;
             
-            if (this.player.y >= this.player.groundY) {
-                this.player.y = this.player.groundY;
+            if (this.player.y >= this.canvas.height - 60) {
+                this.player.y = this.canvas.height - 60;
                 this.player.jumping = false;
             }
         }
@@ -133,33 +111,13 @@ class DinoGame {
                 this.gameOver();
             }
         }
-        
-        // Increase game speed
-        if (this.score % 10 === 0) {
-            this.gameSpeed = Math.min(this.gameSpeed + 0.3, this.maxSpeed);
-        }
     }
     
     checkCollision(player, obstacle) {
-        // Уменьшаем зону коллизии для более точного определения
-        const playerBox = {
-            x: player.x + 5,
-            y: player.y + 5,
-            width: player.width - 10,
-            height: player.height - 10
-        };
-        
-        const obstacleBox = {
-            x: obstacle.x + 2,
-            y: obstacle.y + 2,
-            width: obstacle.width - 4,
-            height: obstacle.height - 4
-        };
-        
-        return playerBox.x < obstacleBox.x + obstacleBox.width &&
-               playerBox.x + playerBox.width > obstacleBox.x &&
-               playerBox.y < obstacleBox.y + obstacleBox.height &&
-               playerBox.y + playerBox.height > obstacleBox.y;
+        return player.x < obstacle.x + obstacle.width &&
+               player.x + player.width > obstacle.x &&
+               player.y < obstacle.y + obstacle.height &&
+               player.y + player.height > obstacle.y;
     }
     
     draw() {
@@ -171,13 +129,16 @@ class DinoGame {
         this.ctx.fillRect(0, this.canvas.height - 20, this.canvas.width, 20);
         
         // Draw player (car)
-        this.ctx.drawImage(
-            this.carSprite,
-            this.player.x,
-            this.player.y,
-            this.player.width,
-            this.player.height
-        );
+        this.ctx.fillStyle = '#1E90FF';
+        this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
+        
+        // Draw car details
+        this.ctx.fillStyle = '#FFFFFF';
+        // Windows
+        this.ctx.fillRect(this.player.x + 5, this.player.y + 5, 15, 10);
+        this.ctx.fillRect(this.player.x + 20, this.player.y + 5, 15, 10);
+        // Body
+        this.ctx.fillRect(this.player.x + 2, this.player.y + 15, 36, 25);
         
         // Draw obstacles
         this.ctx.fillStyle = '#FF4444';
@@ -201,7 +162,7 @@ class DinoGame {
         if (!this.isPlaying) return;
         
         // Create new obstacles
-        if (Math.random() < 0.015) {
+        if (Math.random() < 0.01) {
             this.createObstacle();
         }
         
