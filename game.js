@@ -28,13 +28,37 @@ class DinoGame {
         this.obstacleWidth = 20;
         this.obstacleHeight = 40;
         
+        // Car sprite
+        this.carSprite = new Image();
+        this.carSprite.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9IiMxRTkwRkYiLz48cGF0aCBkPSJNMTAgMTVIMzBWMjVIMTBWMjVaIiBmaWxsPSIjRkZGRkZGIi8+PHBhdGggZD0iTTUgMTVIMzVWMjBIMzVWMjVIMzBWMzBIMTBWMjVIMVYyMFYxNVoiIGZpbGw9IiNGRkZGRkYiLz48L3N2Zz4=';
+        
         // Event listeners
         this.startBtn.addEventListener('click', () => this.startGame());
+        
+        // Touch controls
+        this.setupTouchControls();
+        
+        // Keyboard controls
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
         
         // Set canvas size
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
+    }
+    
+    setupTouchControls() {
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!this.player.jumping) {
+                this.player.jumping = true;
+                this.player.jumpForce = -15;
+            }
+        });
+        
+        // Prevent scrolling when touching the canvas
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
     }
     
     resizeCanvas() {
@@ -130,9 +154,14 @@ class DinoGame {
         this.ctx.fillStyle = '#333';
         this.ctx.fillRect(0, this.canvas.height - 20, this.canvas.width, 20);
         
-        // Draw player
-        this.ctx.fillStyle = '#1E90FF';
-        this.ctx.fillRect(this.player.x, this.player.y, this.player.width, this.player.height);
+        // Draw player (car)
+        this.ctx.drawImage(
+            this.carSprite,
+            this.player.x,
+            this.player.y,
+            this.player.width,
+            this.player.height
+        );
         
         // Draw obstacles
         this.ctx.fillStyle = '#FF4444';
