@@ -9,18 +9,19 @@ class DinoGame {
         // Game state
         this.isPlaying = false;
         this.score = 0;
-        this.gameSpeed = 5;
-        this.maxSpeed = 15;
+        this.gameSpeed = 3;
+        this.maxSpeed = 8;
         
         // Player
         this.player = {
             x: 50,
-            y: this.canvas.height - 60,
+            y: 0,
             width: 40,
             height: 40,
             jumping: false,
             jumpForce: 0,
-            gravity: 0.8
+            gravity: 0.5,
+            groundY: 0
         };
         
         // Obstacles
@@ -38,24 +39,22 @@ class DinoGame {
         // Touch controls
         this.setupTouchControls();
         
-        // Keyboard controls
-        document.addEventListener('keydown', (e) => this.handleKeyPress(e));
-        
         // Set canvas size
         this.resizeCanvas();
         window.addEventListener('resize', () => this.resizeCanvas());
     }
     
     setupTouchControls() {
+        // Prevent default touch behavior
         this.canvas.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            if (!this.player.jumping) {
-                this.player.jumping = true;
-                this.player.jumpForce = -15;
+            if (!this.isPlaying) {
+                this.startGame();
+            } else if (!this.player.jumping) {
+                this.jump();
             }
-        });
+        }, { passive: false });
         
-        // Prevent scrolling when touching the canvas
         this.canvas.addEventListener('touchmove', (e) => {
             e.preventDefault();
         }, { passive: false });
@@ -64,6 +63,15 @@ class DinoGame {
     resizeCanvas() {
         this.canvas.width = this.canvas.offsetWidth;
         this.canvas.height = 200;
+        this.player.groundY = this.canvas.height - 60;
+        this.player.y = this.player.groundY;
+    }
+    
+    jump() {
+        if (!this.player.jumping) {
+            this.player.jumping = true;
+            this.player.jumpForce = -12;
+        }
     }
     
     startGame() {
@@ -71,27 +79,20 @@ class DinoGame {
         
         this.isPlaying = true;
         this.score = 0;
-        this.gameSpeed = 5;
+        this.gameSpeed = 3;
         this.obstacles = [];
         this.player.jumping = false;
         this.player.jumpForce = 0;
-        this.player.y = this.canvas.height - 60;
+        this.player.y = this.player.groundY;
         
         this.startBtn.textContent = 'Игра идет...';
         this.gameLoop();
     }
     
-    handleKeyPress(e) {
-        if (e.code === 'Space' && !this.player.jumping) {
-            this.player.jumping = true;
-            this.player.jumpForce = -15;
-        }
-    }
-    
     createObstacle() {
         const obstacle = {
             x: this.canvas.width,
-            y: this.canvas.height - this.obstacleHeight,
+            y: this.canvas.height - this.obstacleHeight - 20,
             width: this.obstacleWidth,
             height: this.obstacleHeight
         };
@@ -104,8 +105,8 @@ class DinoGame {
             this.player.y += this.player.jumpForce;
             this.player.jumpForce += this.player.gravity;
             
-            if (this.player.y >= this.canvas.height - 60) {
-                this.player.y = this.canvas.height - 60;
+            if (this.player.y >= this.player.groundY) {
+                this.player.y = this.player.groundY;
                 this.player.jumping = false;
             }
         }
@@ -135,15 +136,30 @@ class DinoGame {
         
         // Increase game speed
         if (this.score % 10 === 0) {
-            this.gameSpeed = Math.min(this.gameSpeed + 0.5, this.maxSpeed);
+            this.gameSpeed = Math.min(this.gameSpeed + 0.3, this.maxSpeed);
         }
     }
     
     checkCollision(player, obstacle) {
-        return player.x < obstacle.x + obstacle.width &&
-               player.x + player.width > obstacle.x &&
-               player.y < obstacle.y + obstacle.height &&
-               player.y + player.height > obstacle.y;
+        // Уменьшаем зону коллизии для более точного определения
+        const playerBox = {
+            x: player.x + 5,
+            y: player.y + 5,
+            width: player.width - 10,
+            height: player.height - 10
+        };
+        
+        const obstacleBox = {
+            x: obstacle.x + 2,
+            y: obstacle.y + 2,
+            width: obstacle.width - 4,
+            height: obstacle.height - 4
+        };
+        
+        return playerBox.x < obstacleBox.x + obstacleBox.width &&
+               playerBox.x + playerBox.width > obstacleBox.x &&
+               playerBox.y < obstacleBox.y + obstacleBox.height &&
+               playerBox.y + playerBox.height > obstacleBox.y;
     }
     
     draw() {
@@ -171,7 +187,7 @@ class DinoGame {
         
         // Draw score
         this.ctx.fillStyle = '#000';
-        this.ctx.font = '20px Arial';
+        this.ctx.font = 'bold 20px Arial';
         this.ctx.fillText(`Счёт: ${this.score}`, 10, 30);
     }
     
@@ -185,7 +201,7 @@ class DinoGame {
         if (!this.isPlaying) return;
         
         // Create new obstacles
-        if (Math.random() < 0.02) {
+        if (Math.random() < 0.015) {
             this.createObstacle();
         }
         
