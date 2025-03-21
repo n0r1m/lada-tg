@@ -1,63 +1,63 @@
-# Lada Telegram Mini App
+# Лада Telegram Мини-приложение
 
-A fun and interactive Telegram Mini App featuring a referral system, coin collection, and a dinosaur mini-game.
+Весёлое и интерактивное Telegram Мини-приложение с реферальной системой, сбором монет и мини-игрой с динозавром.
 
-## Features
+## Возможности
 
-- Navigation bar with channel link and "Coming Soon" buttons
-- Referral system with progress tracking
-- Coin collection by clicking the car model
-- Dinosaur mini-game with personal best tracking
-- Responsive design for mobile devices
+- Навигационная панель со ссылкой на канал и кнопками "Скоро"
+- Реферальная система с отслеживанием прогресса
+- Сбор монет кликом по модели автомобиля
+- Мини-игра с динозавром и отслеживанием рекордов
+- Адаптивный дизайн для мобильных устройств
 
-## Deployment to GitHub Pages
+## Развертывание на GitHub Pages
 
-1. Create a new repository on GitHub
-2. Push all files to the repository
-3. Go to repository Settings > Pages
-4. Select the main branch as the source
-5. Save the settings
+1. Создайте новый репозиторий на GitHub
+2. Загрузите все файлы в репозиторий
+3. Перейдите в Settings > Pages
+4. Выберите ветку main как источник
+5. Сохраните настройки
 
-Your app will be available at: `https://[your-username].github.io/[repository-name]`
+Ваше приложение будет доступно по адресу: `https://[ваше-имя-пользователя].github.io/[имя-репозитория]`
 
-## Telegram Bot Setup
+## Настройка Telegram бота
 
-1. Create a new bot using [@BotFather](https://t.me/botfather)
-2. Get your bot token
-3. Set up the webhook to point to your bot's server
-4. Configure the Mini App in BotFather:
-   - Use `/newapp` command
-   - Select your bot
-   - Enter the GitHub Pages URL
-   - Set the app title and description
+1. Создайте нового бота через [@BotFather](https://t.me/botfather)
+2. Получите токен бота
+3. Настройте вебхук, указав на сервер вашего бота
+4. Настройте Мини-приложение в BotFather:
+   - Используйте команду `/newapp`
+   - Выберите вашего бота
+   - Введите URL GitHub Pages
+   - Установите название и описание приложения
 
-## Local Development
+## Локальная разработка
 
-1. Clone the repository
-2. Open `index.html` in a web browser
-3. For Telegram WebApp testing:
-   - Use the Telegram WebApp API in development mode
-   - Or use the [Telegram WebApp Tester](https://t.me/WebAppTestBot)
+1. Клонируйте репозиторий
+2. Откройте `index.html` в веб-браузере
+3. Для тестирования Telegram WebApp:
+   - Используйте Telegram WebApp API в режиме разработки
+   - Или используйте [Telegram WebApp Tester](https://t.me/WebAppTestBot)
 
-## File Structure
+## Структура файлов
 
-- `index.html` - Main HTML file
-- `styles.css` - Styling
-- `script.js` - Core functionality
-- `game.js` - Dinosaur mini-game implementation
+- `index.html` - Основной HTML файл
+- `styles.css` - Стили
+- `script.js` - Основная функциональность
+- `game.js` - Реализация мини-игры с динозавром
 
-## Customization
+## Настройка
 
-1. Update the channel URL in `script.js`:
+1. Обновите URL канала в `script.js`:
 ```javascript
-tg.openTelegramLink('https://t.me/your_channel');
+tg.openTelegramLink('https://t.me/ваш_канал');
 ```
 
-2. Update the bot username in the referral link generation:
+2. Обновите имя бота в генерации реферальной ссылки:
 ```javascript
-const botUsername = tg.initDataUnsafe.user?.username || 'your_bot';
+const botUsername = tg.initDataUnsafe.user?.username || 'ваш_бот';
 ```
 
-## Contributing
+## Участие в разработке
 
-Feel free to submit issues and enhancement requests! 
+Не стесняйтесь отправлять проблемы и запросы на улучшение! 

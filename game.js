@@ -53,7 +53,7 @@ class DinoGame {
         this.player.jumpForce = 0;
         this.player.y = this.canvas.height - 60;
         
-        this.startBtn.textContent = 'Playing...';
+        this.startBtn.textContent = 'Игра идет...';
         this.gameLoop();
     }
     
@@ -143,13 +143,13 @@ class DinoGame {
         // Draw score
         this.ctx.fillStyle = '#000';
         this.ctx.font = '20px Arial';
-        this.ctx.fillText(`Score: ${this.score}`, 10, 30);
+        this.ctx.fillText(`Счёт: ${this.score}`, 10, 30);
     }
     
     gameOver() {
         this.isPlaying = false;
-        this.startBtn.textContent = 'Start Game';
-        showToast(`Game Over! Score: ${this.score}`);
+        this.startBtn.textContent = 'Начать игру';
+        showToast(`Игра окончена! Счёт: ${this.score}`);
     }
     
     gameLoop() {

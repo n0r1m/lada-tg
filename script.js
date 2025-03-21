@@ -28,11 +28,11 @@ channelBtn.addEventListener('click', () => {
 });
 
 comingSoon1.addEventListener('click', () => {
-    showToast('Coming Soon!');
+    showToast('Скоро будет доступно!');
 });
 
 comingSoon2.addEventListener('click', () => {
-    showToast('Coming Soon!');
+    showToast('Скоро будет доступно!');
 });
 
 // Referral System
@@ -42,7 +42,7 @@ friendsBtn.addEventListener('click', () => {
     
     // Copy to clipboard
     navigator.clipboard.writeText(referralLink).then(() => {
-        showToast('Referral link copied to clipboard!');
+        showToast('Реферальная ссылка скопирована!');
     });
 });
 
@@ -66,7 +66,7 @@ carModel.addEventListener('click', () => {
     coins++;
     localStorage.setItem('coins', coins);
     updateUI();
-    showToast('+1 coin!');
+    showToast('+1 монета!');
 });
 
 // Helper Functions
